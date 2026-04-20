@@ -1,28 +1,63 @@
+import java.util.Random;
+
 public class Main {
 
 
     public static void main(String[] args) {
-        OrderTask orderTask = new OrderTask();
-        for (int i = 0; i < 200000; i++) {
-           new Thread(orderTask).start();
-        }
-        for (int i = 0; i < 200000; i++) {
-            new Thread(orderTask).start();
-        }
-//----------------------------------------------------
-        Example example = new Example();
+        Student student = new Student("abc" , 10);
 
-        Thread t1 = new Thread(()->{
-            for (int i = 0; i < 1000000; i++) {
-                example.add();
+
+        Thread avgThread = new Thread(()->{
+            while (true){
+                System.out.println("The avg : " + student.getAvg());
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
-        t1.start();
-        Thread t2 = new Thread(()->{
-            for (int i = 0; i < 1000000; i++) {
-                example.sub();
+        avgThread.start();
+
+        Thread maxThread = new Thread(()->{
+            while (true){
+                System.out.println("The max : " + student.getMax());
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
-        t2.start();
+        maxThread.start();
+
+        Thread addThread = new Thread(()->{
+            while (true){
+                int randomGrade = new Random().nextInt(101);
+                System.out.println("Adding  : " + randomGrade + " : " + student.addGrades(randomGrade));
+
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        addThread.start();
+
+        Thread removeThread = new Thread(()->{
+            while (true){
+                System.out.println("removing  : " + student.removeFirstGrade());
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        removeThread.start();
     }
 }
