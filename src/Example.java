@@ -14,5 +14,6 @@ public class Example {
     public synchronized void sub(){
         this.counter--;
         System.out.println(counter);
+
     }
 }

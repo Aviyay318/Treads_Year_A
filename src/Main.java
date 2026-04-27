@@ -4,60 +4,48 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Student student = new Student("abc" , 10);
+        int [] grades = new int[20];
+
+        int x  = 0;
+       try{
+           System.out.println((5/x));
+       }catch (Exception e){
+           System.out.println("can't div by zero");
+       }
 
 
-        Thread avgThread = new Thread(()->{
-            while (true){
-                System.out.println("The avg : " + student.getAvg());
-
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+        Thread t1  = new Thread(()->{
+            for (int i = 0; i < grades.length/2 ; i++) {
+                Random random = new Random();
+                int grade = random.nextInt(50,101);
+                System.out.println("T1 : "  +grade);
+               grades[i] = grade ;
             }
         });
-        avgThread.start();
-
-        Thread maxThread = new Thread(()->{
-            while (true){
-                System.out.println("The max : " + student.getMax());
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+        t1.start();
+        Thread t2  = new Thread(()->{
+            for (int i = grades.length/2; i < grades.length ; i++) {
+                Random random = new Random();
+                int grade = random.nextInt(50,101);
+                System.out.println("T2: " + grade);
+                grades[i] = grade ;
             }
         });
-        maxThread.start();
+        t2.start();
 
-        Thread addThread = new Thread(()->{
-            while (true){
-                int randomGrade = new Random().nextInt(101);
-                System.out.println("Adding  : " + randomGrade + " : " + student.addGrades(randomGrade));
-
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        addThread.start();
-
-        Thread removeThread = new Thread(()->{
-            while (true){
-                System.out.println("removing  : " + student.removeFirstGrade());
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        removeThread.start();
+        System.out.println("before join");
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("after join");
+        int sum = 0;
+        for (int i = 0; i < grades.length; i++) {
+            sum+=grades[i];
+        }
+        double avg  = (double) sum / grades.length;
+        System.out.println("The Avg : " + avg );
     }
 }
