@@ -3,7 +3,7 @@ import java.util.Random;
 public class MyMain {
     static int partialSum;
     public static void main(String[] args) {
-        int[] arr = new int[new Random().nextInt(200001)];
+        int[] arr = new int[new Random().nextInt(200000)];
         for (int i = 0; i < arr.length; i++)
             arr[i] = i;
 
@@ -12,6 +12,7 @@ public class MyMain {
     }
 
     public static double calculateAverage(int[] array) {
+        Object lock = new Object();
         int chunkSize = 100000;
         int numberOfThreads = (int) Math.ceil((double) array.length / chunkSize);
         Thread[] threads = new Thread[numberOfThreads];
@@ -23,7 +24,9 @@ public class MyMain {
 
             threads[t] = new Thread(() -> {
                 for (int i = start; i < end; i++)
-                    partialSum += array[i];
+                   synchronized (lock){
+                       partialSum += array[i];
+                   }
             });
         }
 
